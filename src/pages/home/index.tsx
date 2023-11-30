@@ -37,6 +37,7 @@ const HomePage = () => {
           </div>
         </form>
       </div>
+      <div></div>
     </div>
   );
 };
