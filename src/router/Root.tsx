@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -22,9 +23,9 @@ const Root = () => {
     <Wrap>
       <StyledAside>
         {constmenu.map((menu) => (
-          <div key={menu.label} onClick={() => handleClickMenu(menu.url)}>
+          <Box key={menu.label} onClick={() => handleClickMenu(menu.url)}>
             {menu.label}
-          </div>
+          </Box>
         ))}
       </StyledAside>
       <StyledMain>

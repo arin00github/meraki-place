@@ -1,44 +1,83 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getArticleSearch } from "../../services/api/articleApi";
+import {
+  Box,
+  Container,
+  Flex,
+  Input,
+  FormLabel,
+  Heading,
+  Text,
+  LinkBox,
+  Spinner,
+  Grid,
+  GridItem,
+} from "@chakra-ui/react";
+import ArticleCard from "../../components/ArticleCard";
 
 const HomePage = () => {
-  const [searchWord, setSearchWord] = useState("");
+  const [searchWord, setSearchWord] = useState("election");
 
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ["search-article"],
-    queryFn: () => getArticleSearch(),
+  const [searchParams, setSearchParams] = useState<string>("election");
+
+  const { data, isError, isLoading, error } = useQuery({
+    queryKey: ["search-article", searchParams],
+    queryFn: () => getArticleSearch(searchParams),
     refetchOnWindowFocus: false,
   });
 
-  console.log("data", data);
+  const articles = data?.response.docs;
 
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
+  console.log("data", data);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchWord(e.target.value);
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("handleSubmit", searchWord);
+    e.preventDefault();
+    setSearchParams(searchWord);
+  };
+
+  if (isLoading) {
+    <Box w="100%" minH={300} display={"flex"}>
+      <Spinner />
+    </Box>;
+  }
+
+  if (isError || error) {
+    <Box w="100%" minH={300} display={"flex"}>
+      <Text>Page Error</Text>
+    </Box>;
+  }
+
   return (
-    <div>
-      <div>HOME Page</div>
-      <div>
-        <form action="">
-          <div>
-            <label htmlFor="search-word"></label>
-            <input
+    <Container>
+      <Heading py={4} textAlign={"center"}>
+        NewYork Times
+      </Heading>
+      <Box>
+        <form onSubmit={handleSubmit}>
+          <Flex justify={"center"}>
+            <FormLabel htmlFor="search-word">Search</FormLabel>
+            <Input
               type="text"
+              w={300}
               id="search-word"
               value={searchWord}
               onChange={handleChange}
             />
-          </div>
+          </Flex>
         </form>
-      </div>
-      <div></div>
-    </div>
+      </Box>
+      <Grid mt={12} templateColumns={`repeat(2, 1fr)`} gap={4}>
+        {articles?.map((article) => (
+          <ArticleCard key={article._id} article={article} />
+        ))}
+      </Grid>
+    </Container>
   );
 };
 

@@ -10,7 +10,6 @@ const pageArray: RouteObject[] = [
 
 const routes: RouteObject[] = [
   {
-    path: "/",
     element: <Root />,
     children: pageArray,
   },

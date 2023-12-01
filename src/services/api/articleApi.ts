@@ -4,8 +4,8 @@ import { ResultObject } from "../interface/article.interface";
 const { VITE_API_KEY } = process.env;
 
 export const getArticleSearch = async (
-  query: string = "election"
-): Promise<ResultObject> => {
+  query: string,
+): Promise<ResultObject | undefined> => {
   const url = `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${query}&api-key=${VITE_API_KEY}
     `;
 
