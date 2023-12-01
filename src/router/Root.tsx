@@ -23,7 +23,14 @@ const Root = () => {
     <Wrap>
       <StyledAside>
         {constmenu.map((menu) => (
-          <Box key={menu.label} onClick={() => handleClickMenu(menu.url)}>
+          <Box
+            px={4}
+            h="40px"
+            lineHeight="40px"
+            _hover={{ cursor: "pointer", backgroundColor: "whiteAlpha.300" }}
+            key={menu.label}
+            onClick={() => handleClickMenu(menu.url)}
+          >
             {menu.label}
           </Box>
         ))}

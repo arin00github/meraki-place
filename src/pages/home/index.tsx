@@ -9,14 +9,17 @@ import {
   FormLabel,
   Heading,
   Text,
-  LinkBox,
   Spinner,
   Grid,
-  GridItem,
 } from "@chakra-ui/react";
 import ArticleCard from "../../components/ArticleCard";
+import { useAppSelector } from "../../redux/hooks";
 
 const HomePage = () => {
+  const storedBookmarks = useAppSelector((state) => state.bookmark);
+
+  const { articles: savedArticles } = storedBookmarks;
+
   const [searchWord, setSearchWord] = useState("election");
 
   const [searchParams, setSearchParams] = useState<string>("election");
@@ -28,8 +31,6 @@ const HomePage = () => {
   });
 
   const articles = data?.response.docs;
-
-  console.log("data", data);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchWord(e.target.value);
@@ -74,7 +75,15 @@ const HomePage = () => {
       </Box>
       <Grid mt={12} templateColumns={`repeat(2, 1fr)`} gap={4}>
         {articles?.map((article) => (
-          <ArticleCard key={article._id} article={article} />
+          <ArticleCard
+            key={article._id}
+            article={article}
+            isSaved={
+              savedArticles.find((atc) => atc._id === article._id)
+                ? true
+                : false
+            }
+          />
         ))}
       </Grid>
     </Container>
